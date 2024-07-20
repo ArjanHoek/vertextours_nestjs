@@ -7,10 +7,9 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
-  login() {
-    const data = this.authService.login();
+  async login(@Body() dto: AuthDTO) {
+    const data = await this.authService.login(dto);
     return {
-      status: 'success',
       data,
     };
   }

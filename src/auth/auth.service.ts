@@ -12,13 +12,28 @@ export class AuthService {
     private userRepository: Repository<User>,
   ) {}
 
-  login() {
-    return { message: 'You are logged in' };
+  async login(dto: AuthDTO) {
+    const user = await this.userRepository.findOne({
+      where: { email: dto.email },
+    });
+
+    if (!user) {
+      throw new ForbiddenException('Credentials incorrect');
+    }
+
+    const passwordCorrect = await argon.verify(user.hash, dto.password);
+
+    if (!passwordCorrect) {
+      throw new ForbiddenException('Credentials incorrect');
+    }
+
+    const { id, email } = user;
+    return { id, email };
   }
 
-  async signup({ email, password }: AuthDTO) {
-    const hash = await argon.hash(password);
-    const newUser = this.userRepository.create({ email, hash });
+  async signup(dto: AuthDTO) {
+    const hash = await argon.hash(dto.password);
+    const newUser = this.userRepository.create({ email: dto.email, hash });
 
     try {
       return await this.userRepository.insert(newUser);
