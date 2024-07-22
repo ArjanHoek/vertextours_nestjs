@@ -40,11 +40,7 @@ export class AuthService {
 
     try {
       const user = await this.userService.createOne({ email, hash });
-      const mappedUser = ['id', 'email', 'created_at', 'updated_at'].reduce(
-        (acc, cur) => ({ ...acc, [cur]: user[cur] }),
-        {},
-      );
-      return mappedUser;
+      return this.signToken(user);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         if ((error as any).code === '23505') {
