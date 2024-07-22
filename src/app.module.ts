@@ -28,7 +28,7 @@ import { Refuge } from './entities/refuge.entity';
     AuthModule,
     UserModule,
     RefugeModule,
-    ConfigModule.forRoot({}),
+    ConfigModule.forRoot(),
   ],
 })
 export class AppModule {}

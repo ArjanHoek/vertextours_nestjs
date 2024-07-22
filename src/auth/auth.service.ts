@@ -7,10 +7,17 @@ import { QueryFailedError } from 'typeorm';
 import { AuthDTO } from './dto';
 import * as argon from 'argon2';
 import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/entities/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
 
   async signIn({ email, password }: AuthDTO) {
     const user = await this.userService.findOne({ email }, { hash: true });
@@ -25,8 +32,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    delete user.hash;
-    return user;
+    return this.signToken(user);
   }
 
   async signUp({ email, password }: AuthDTO) {
@@ -48,5 +54,18 @@ export class AuthService {
 
       throw error;
     }
+  }
+
+  private signToken(user: User) {
+    return this.jwtService.signAsync({
+      sub: user.id,
+      email: user.email,
+    });
+  }
+
+  public validateToken(token: string) {
+    return this.jwtService.verifyAsync(token, {
+      secret: this.configService.get('JWT_SECRET'),
+    });
   }
 }

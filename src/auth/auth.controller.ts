@@ -9,13 +9,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('signin')
   async signIn(@Body() dto: AuthDTO) {
-    const user = await this.authService.signIn(dto);
-    return { status: 'success', data: { user } };
+    const access_token = await this.authService.signIn(dto);
+    return { access_token };
   }
 
   @Post('signup')
   async signUp(@Body() dto: AuthDTO) {
     const user = await this.authService.signUp(dto);
-    return { status: 'success', data: { user } };
+    return { user };
   }
 }
