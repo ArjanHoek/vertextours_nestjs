@@ -7,9 +7,10 @@ import { QueryFailedError } from 'typeorm';
 import { AuthDTO } from './dto';
 import * as argon from 'argon2';
 import { UserService } from 'src/user/user.service';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { User } from 'src/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
+import { JwtPayload } from 'src/types';
 
 @Injectable()
 export class AuthService {
@@ -53,15 +54,13 @@ export class AuthService {
   }
 
   private signToken(user: User) {
-    return this.jwtService.signAsync({
-      sub: user.id,
-      email: user.email,
-    });
+    const payload: JwtPayload = { sub: user.id, email: user.email };
+    return this.jwtService.signAsync(payload);
   }
 
   public validateToken(token: string) {
-    return this.jwtService.verifyAsync(token, {
-      secret: this.configService.get('JWT_SECRET'),
-    });
+    const secret = this.configService.get('JWT_SECRET');
+    const options: JwtVerifyOptions = { secret };
+    return this.jwtService.verifyAsync(token, options);
   }
 }
