@@ -1,42 +1,50 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
-import { QueryFailedError, Repository } from 'typeorm';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { QueryFailedError } from 'typeorm';
 import { AuthDTO } from './dto';
 import * as argon from 'argon2';
+import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/entities/user.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private userService: UserService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
-  async login(dto: AuthDTO) {
-    const user = await this.userRepository.findOne({
-      where: { email: dto.email },
-    });
+  async signIn({ email, password }: AuthDTO) {
+    const user = await this.userService.findOne({ email }, { hash: true });
 
     if (!user) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new UnauthorizedException();
     }
 
-    const passwordCorrect = await argon.verify(user.hash, dto.password);
+    const passwordCorrect = await argon.verify(user.hash, password);
 
     if (!passwordCorrect) {
-      throw new ForbiddenException('Credentials incorrect');
+      throw new UnauthorizedException();
     }
 
-    const { id, email } = user;
-    return { id, email };
+    return this.signToken(user);
   }
 
-  async signup(dto: AuthDTO) {
-    const hash = await argon.hash(dto.password);
-    const newUser = this.userRepository.create({ email: dto.email, hash });
+  async signUp({ email, password }: AuthDTO) {
+    const hash = await argon.hash(password);
 
     try {
-      return await this.userRepository.insert(newUser);
+      const user = await this.userService.createOne({ email, hash });
+      const mappedUser = ['id', 'email', 'created_at', 'updated_at'].reduce(
+        (acc, cur) => ({ ...acc, [cur]: user[cur] }),
+        {},
+      );
+      return mappedUser;
     } catch (error) {
       if (error instanceof QueryFailedError) {
         if ((error as any).code === '23505') {
@@ -46,5 +54,18 @@ export class AuthService {
 
       throw error;
     }
+  }
+
+  private signToken(user: User) {
+    return this.jwtService.signAsync({
+      sub: user.id,
+      email: user.email,
+    });
+  }
+
+  public validateToken(token: string) {
+    return this.jwtService.verifyAsync(token, {
+      secret: this.configService.get('JWT_SECRET'),
+    });
   }
 }

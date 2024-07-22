@@ -1,16 +1,36 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
-  @Get()
-  async findAll() {
-    console.log('test');
-    const users = await this.userService.findAll();
-    return {
-      status: 'success',
-      data: { users },
-    };
+
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  async getProfile(
+    @Request() { jwtPayload: { sub: id } }: { jwtPayload: { sub: string } },
+  ) {
+    if (!id) {
+      throw new NotFoundException();
+    }
+
+    const user = await this.userService.findOne({ id });
+
+    return { user };
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const user = await this.userService.findOne({ id });
+
+    return { user };
   }
 }
