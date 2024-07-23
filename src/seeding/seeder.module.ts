@@ -1,17 +1,23 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from 'src/modules/database/database.module';
-import { UserSeederModule } from './user/user.module';
 import { SeederService } from './seeder.service';
 import { ConfigModule } from '@nestjs/config';
-import { RefugeSeederModule } from './refuge/refuge.module';
+import { UserSeederService } from './seeders/user.seeder';
+import { RefugeSeederService } from './seeders/refuge.seeder';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/entities/user.entity';
+import { Refuge } from 'src/entities/refuge.entity';
+import { IdentifierService } from './identifiers.service';
+
+const seedEntities = [User, Refuge];
+const seeders = [UserSeederService, RefugeSeederService];
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     DatabaseModule,
-    UserSeederModule,
-    RefugeSeederModule,
+    TypeOrmModule.forFeature(seedEntities),
   ],
-  providers: [SeederService],
+  providers: [SeederService, IdentifierService, ...seeders],
 })
 export class SeederModule {}
