@@ -4,12 +4,11 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { RefugeModule } from './refuge/refuge.module';
-
-import { DbModule } from './database/database.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
-    DbModule,
+    DatabaseModule,
     AuthModule,
     UserModule,
     RefugeModule,

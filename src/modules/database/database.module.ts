@@ -22,4 +22,4 @@ import { User } from 'src/entities/user.entity';
     }),
   ],
 })
-export class DbModule {}
+export class DatabaseModule {}
