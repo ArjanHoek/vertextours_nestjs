@@ -6,8 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { RefugeModule } from './refuge/refuge.module';
 
-import { User } from './entities/user.entity';
-import { Refuge } from './entities/refuge.entity';
+import { User } from '../entities/user.entity';
+import { Refuge } from '../entities/refuge.entity';
 
 @Module({
   imports: [

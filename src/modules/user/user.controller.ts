@@ -7,7 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/modules/auth/auth.guard';
 import { JwtPayload } from 'src/types';
 
 @Controller('user')

@@ -6,7 +6,7 @@ import {
 import { QueryFailedError } from 'typeorm';
 import { AuthDTO } from './dto';
 import * as argon from 'argon2';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/modules/user/user.service';
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { User } from 'src/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
