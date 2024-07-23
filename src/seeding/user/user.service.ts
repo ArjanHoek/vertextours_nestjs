@@ -7,22 +7,20 @@ import users from './user.data';
 
 @Injectable()
 export class UserSeederService {
+  public ids: string[] = [];
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
 
   async create() {
-    const output: string[] = [];
-
     for (const { password, email } of users) {
       const hash = await argon.hash(password);
       const newEntity = this.userRepository.create({ email, hash });
       const { id } = await this.userRepository.save(newEntity);
-      output.push(id);
+      this.ids.push(id);
     }
-
-    return output;
   }
 
   async clear() {

@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { UserSeederService } from './user/user.service';
+import { RefugeSeederService } from './refuge/refuge.service';
 
 @Injectable()
 export class SeederService {
-  constructor(private readonly userSeederService: UserSeederService) {}
+  constructor(
+    private userSeederService: UserSeederService,
+    private refugeSeederService: RefugeSeederService,
+  ) {}
 
   async seed() {
+    await this.refugeSeederService.clear();
     await this.userSeederService.clear();
 
-    const userIds = await this.userSeederService.create();
-    console.log(userIds);
+    await this.userSeederService.create();
+    await this.refugeSeederService.create();
   }
 }
