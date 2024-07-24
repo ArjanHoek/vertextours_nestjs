@@ -1,16 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { UserSeederService } from './seeders/user.seeder';
-import { RefugeSeederService } from './seeders/refuge.seeder';
-import { StageSeederService } from './seeders/stage.seeder';
-import { TourSeederService } from './seeders/tour.seed';
-import { TourStageSeederService } from './seeders/tourStage.seeder';
-import { ReservationSeederService } from './seeders/reservation.seeder';
-import { RoomSeederService } from './seeders/room.seeder';
-import { BedSeederService } from './seeders/bed.seeder';
-import { BedReservationSeederService } from './seeders/bedReservation.seeder';
+import {
+  UserSeederService,
+  RefugeSeederService,
+  StageSeederService,
+  TourSeederService,
+  TourStageSeederService,
+  ReservationSeederService,
+  RoomSeederService,
+  BedSeederService,
+  BedReservationSeederService,
+} from './seeders/';
 
 @Injectable()
 export class SeederService {
+  private clearOrder = [
+    this.bedReservationSeederService,
+    this.bedSeederService,
+    this.roomSeederService,
+    this.reservationSeederService,
+    this.tourStageSeederService,
+    this.tourSeederService,
+    this.stageSeederService,
+    this.refugeSeederService,
+    this.userSeederService,
+  ];
+
+  private createOrder = [...this.clearOrder].reverse();
+
   constructor(
     private userSeederService: UserSeederService,
     private refugeSeederService: RefugeSeederService,
@@ -24,35 +40,11 @@ export class SeederService {
   ) {}
 
   async seed() {
-    await this.clearAll();
-    await this.createAll();
-  }
-
-  async clearAll() {
-    await this.bedReservationSeederService.clear();
-    await this.bedSeederService.clear();
-    await this.roomSeederService.clear();
-    await this.reservationSeederService.clear();
-
-    await this.tourStageSeederService.clear();
-    await this.tourSeederService.clear();
-    await this.stageSeederService.clear();
-
-    await this.refugeSeederService.clear();
-    await this.userSeederService.clear();
-  }
-
-  async createAll() {
-    await this.userSeederService.create();
-    await this.refugeSeederService.create();
-
-    await this.stageSeederService.create();
-    await this.tourSeederService.create();
-    await this.tourStageSeederService.create();
-
-    await this.reservationSeederService.create();
-    await this.roomSeederService.create();
-    await this.bedSeederService.create();
-    await this.bedReservationSeederService.create();
+    for (const service of this.clearOrder) {
+      await service.clear();
+    }
+    for (const service of this.createOrder) {
+      await service.create();
+    }
   }
 }

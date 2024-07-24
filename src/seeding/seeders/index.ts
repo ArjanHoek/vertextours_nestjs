@@ -8,7 +8,7 @@ import { UserSeederService } from './user.seeder';
 import { BedSeederService } from './bed.seeder';
 import { BedReservationSeederService } from './bedReservation.seeder';
 
-export const seedersList = [
+const seedersList = [
   UserSeederService,
   RefugeSeederService,
   StageSeederService,
@@ -19,3 +19,16 @@ export const seedersList = [
   BedSeederService,
   BedReservationSeederService,
 ];
+
+export {
+  seedersList,
+  UserSeederService,
+  RefugeSeederService,
+  StageSeederService,
+  TourSeederService,
+  TourStageSeederService,
+  ReservationSeederService,
+  RoomSeederService,
+  BedSeederService,
+  BedReservationSeederService,
+};
