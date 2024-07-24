@@ -26,7 +26,8 @@ export class StageSeederService {
       );
 
       const newEntity = this.stageRepository.create({ from_refuge, to_refuge });
-      await this.stageRepository.save(newEntity);
+      const { id } = await this.stageRepository.save(newEntity);
+      this.identifierService.saveIdentifier('stage', id);
     }
   }
 
