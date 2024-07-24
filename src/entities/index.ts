@@ -8,6 +8,18 @@ import { Stage } from './stage.entity';
 import { Tour } from './tour.entity';
 import { TourStage } from './tourStage.entity';
 
+const entitiesList = [
+  Bed,
+  BedReservation,
+  Refuge,
+  Reservation,
+  Room,
+  Stage,
+  Tour,
+  TourStage,
+  User,
+];
+
 export {
   Bed,
   BedReservation,
@@ -18,4 +30,5 @@ export {
   Tour,
   TourStage,
   User,
+  entitiesList,
 };

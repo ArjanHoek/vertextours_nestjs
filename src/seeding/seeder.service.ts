@@ -5,6 +5,7 @@ import { StageSeederService } from './seeders/stage.seeder';
 import { TourSeederService } from './seeders/tour.seed';
 import { TourStageSeederService } from './seeders/tourStage.seeder';
 import { ReservationSeederService } from './seeders/reservation.seeder';
+import { RoomSeederService } from './seeders/room.seeder';
 
 @Injectable()
 export class SeederService {
@@ -15,6 +16,7 @@ export class SeederService {
     private tourSeederService: TourSeederService,
     private tourStageSeederService: TourStageSeederService,
     private reservationSeederService: ReservationSeederService,
+    private roomSeederService: RoomSeederService,
   ) {}
 
   async seed() {
@@ -23,11 +25,12 @@ export class SeederService {
   }
 
   async clearAll() {
-    await this.tourStageSeederService.clear();
-    await this.stageSeederService.clear();
-    await this.tourSeederService.clear();
-
+    await this.roomSeederService.clear();
     await this.reservationSeederService.clear();
+
+    await this.tourStageSeederService.clear();
+    await this.tourSeederService.clear();
+    await this.stageSeederService.clear();
 
     await this.refugeSeederService.clear();
     await this.userSeederService.clear();
@@ -42,5 +45,6 @@ export class SeederService {
     await this.tourStageSeederService.create();
 
     await this.reservationSeederService.create();
+    await this.roomSeederService.create();
   }
 }
