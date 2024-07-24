@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Refuge } from './refuge.entity';
+import { Refuge, Reservation, Tour } from './';
 
 @Entity()
 export class User {
@@ -26,4 +26,10 @@ export class User {
 
   @OneToMany(() => Refuge, ({ owner }) => owner)
   refuges!: Refuge[];
+
+  @OneToMany(() => Tour, ({ created_by }) => created_by)
+  tours_created!: Tour[];
+
+  @OneToMany(() => Reservation, ({ user }) => user)
+  reservations!: Reservation[];
 }

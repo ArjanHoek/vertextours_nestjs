@@ -5,11 +5,30 @@ import { ConfigModule } from '@nestjs/config';
 import { UserSeederService } from './seeders/user.seeder';
 import { RefugeSeederService } from './seeders/refuge.seeder';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
-import { Refuge } from 'src/entities/refuge.entity';
 import { IdentifierService } from './identifiers.service';
+import {
+  Bed,
+  BedReservation,
+  Refuge,
+  Reservation,
+  Room,
+  Stage,
+  Tour,
+  TourStage,
+  User,
+} from 'src/entities';
 
-const seedEntities = [User, Refuge];
+const seedEntities = [
+  User,
+  Refuge,
+  Stage,
+  Tour,
+  TourStage,
+  Reservation,
+  Room,
+  Bed,
+  BedReservation,
+];
 const seeders = [UserSeederService, RefugeSeederService];
 
 @Module({

@@ -1,3 +1,4 @@
+import { IsIn } from 'class-validator';
 import {
   Column,
   Entity,
@@ -5,10 +6,12 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Room, Stage, User } from './';
+import { BedReservation, Room } from './';
+
+const placementOptions = ['start', 'between', 'end', 'stretch'];
 
 @Entity()
-export class Refuge {
+export class Bed {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -24,24 +27,19 @@ export class Refuge {
   })
   updated_at!: Date;
 
-  @Column({ unique: true })
-  name!: string;
+  @Column({ type: 'integer' })
+  order!: number;
 
   @Column()
-  country!: string;
+  @IsIn(placementOptions)
+  placement!: string;
 
-  @ManyToOne(() => User, ({ refuges }) => refuges, {
+  @ManyToOne(() => Room, ({ beds }) => beds, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  owner!: User;
+  room!: Room;
 
-  @OneToMany(() => Stage, ({ from_refuge }) => from_refuge)
-  starts_at!: Stage[];
-
-  @OneToMany(() => Stage, ({ to_refuge }) => to_refuge)
-  ends_at!: Stage[];
-
-  @OneToMany(() => Room, ({ refuge }) => refuge)
-  rooms!: Room[];
+  @OneToMany(() => BedReservation, ({ bed }) => bed)
+  reservations!: BedReservation[];
 }

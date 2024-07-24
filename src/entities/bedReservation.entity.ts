@@ -2,13 +2,14 @@ import {
   Column,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
-import { Room, Stage, User } from './';
+import { Bed, Reservation } from './';
 
 @Entity()
-export class Refuge {
+@Unique('bed already has a reservation on this date', ['date', 'bed'])
+export class BedReservation {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -24,24 +25,18 @@ export class Refuge {
   })
   updated_at!: Date;
 
-  @Column({ unique: true })
-  name!: string;
+  @Column()
+  date!: Date;
 
   @Column()
-  country!: string;
+  half_board!: boolean;
 
-  @ManyToOne(() => User, ({ refuges }) => refuges, {
+  @ManyToOne(() => Bed, ({ reservations }) => reservations, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  owner!: User;
+  bed!: Bed;
 
-  @OneToMany(() => Stage, ({ from_refuge }) => from_refuge)
-  starts_at!: Stage[];
-
-  @OneToMany(() => Stage, ({ to_refuge }) => to_refuge)
-  ends_at!: Stage[];
-
-  @OneToMany(() => Room, ({ refuge }) => refuge)
-  rooms!: Room[];
+  @ManyToOne(() => Reservation, ({ beds }) => beds)
+  reservation!: Reservation;
 }

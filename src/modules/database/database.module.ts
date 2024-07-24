@@ -1,8 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Refuge } from 'src/entities/refuge.entity';
-import { User } from 'src/entities/user.entity';
+import {
+  Bed,
+  BedReservation,
+  Refuge,
+  Reservation,
+  Room,
+  Stage,
+  Tour,
+  TourStage,
+  User,
+} from 'src/entities';
 
 @Module({
   imports: [
@@ -16,7 +25,17 @@ import { User } from 'src/entities/user.entity';
         username: conf.get('DB_USER'),
         password: conf.get('DB_PASS'),
         database: conf.get('DB_NAME'),
-        entities: [User, Refuge],
+        entities: [
+          User,
+          Refuge,
+          Stage,
+          Tour,
+          TourStage,
+          Reservation,
+          Room,
+          Bed,
+          BedReservation,
+        ],
         synchronize: true,
       }),
     }),

@@ -5,12 +5,17 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Room, Stage, User } from './';
+import { MaxLength } from 'class-validator';
+import { TourStage, User } from './';
 
 @Entity()
-export class Refuge {
+export class Tour {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
+
+  @Column()
+  @MaxLength(40)
+  name!: string;
 
   @Column({
     type: 'timestamp with time zone',
@@ -24,24 +29,12 @@ export class Refuge {
   })
   updated_at!: Date;
 
-  @Column({ unique: true })
-  name!: string;
-
-  @Column()
-  country!: string;
-
-  @ManyToOne(() => User, ({ refuges }) => refuges, {
+  @ManyToOne(() => User, ({ tours_created }) => tours_created, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  owner!: User;
+  created_by!: User;
 
-  @OneToMany(() => Stage, ({ from_refuge }) => from_refuge)
-  starts_at!: Stage[];
-
-  @OneToMany(() => Stage, ({ to_refuge }) => to_refuge)
-  ends_at!: Stage[];
-
-  @OneToMany(() => Room, ({ refuge }) => refuge)
-  rooms!: Room[];
+  @OneToMany(() => TourStage, ({ tour }) => tour)
+  stages!: TourStage[];
 }
