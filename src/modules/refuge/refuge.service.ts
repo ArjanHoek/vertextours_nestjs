@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Refuge } from 'src/entities/refuge.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
+import { RefugeDto } from './dto/refuge.dto';
 
 @Injectable()
 export class RefugeService {
@@ -28,5 +29,10 @@ export class RefugeService {
         name: true,
       },
     });
+  }
+
+  createOne(dto: RefugeDto) {
+    const newRefuge = this.refugeRepository.create(dto);
+    return this.refugeRepository.save(newRefuge);
   }
 }
