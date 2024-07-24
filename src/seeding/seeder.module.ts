@@ -20,6 +20,7 @@ import {
 import { StageSeederService } from './seeders/stage.seeder';
 import { TourSeederService } from './seeders/tour.seed';
 import { TourStageSeederService } from './seeders/tourStage.seeder';
+import { ReservationSeederService } from './seeders/reservation.seeder';
 
 const seedEntities = [
   User,
@@ -39,6 +40,7 @@ const seeders = [
   StageSeederService,
   TourSeederService,
   TourStageSeederService,
+  ReservationSeederService,
 ];
 
 @Module({
