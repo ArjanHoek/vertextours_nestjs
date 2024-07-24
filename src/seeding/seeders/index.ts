@@ -5,6 +5,7 @@ import { ReservationSeederService } from './reservation.seeder';
 import { RoomSeederService } from './room.seeder';
 import { RefugeSeederService } from './refuge.seeder';
 import { UserSeederService } from './user.seeder';
+import { BedSeederService } from './bed.seeder';
 
 export const seedersList = [
   UserSeederService,
@@ -14,4 +15,5 @@ export const seedersList = [
   TourStageSeederService,
   ReservationSeederService,
   RoomSeederService,
+  BedSeederService,
 ];
