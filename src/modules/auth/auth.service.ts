@@ -61,6 +61,6 @@ export class AuthService {
   public validateToken(token: string) {
     const secret = this.configService.get('JWT_SECRET');
     const options: JwtVerifyOptions = { secret };
-    return this.jwtService.verifyAsync(token, options);
+    return this.jwtService.verifyAsync<JwtPayload>(token, options);
   }
 }
