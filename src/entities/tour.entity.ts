@@ -13,10 +13,6 @@ export class Tour {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
-  @MaxLength(40)
-  name!: string;
-
   @Column({
     type: 'timestamp with time zone',
     default: () => 'CURRENT_TIMESTAMP',
@@ -28,6 +24,10 @@ export class Tour {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updated_at!: Date;
+
+  @Column()
+  @MaxLength(40)
+  name!: string;
 
   @ManyToOne(() => User, ({ tours_created }) => tours_created, {
     nullable: false,

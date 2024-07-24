@@ -18,6 +18,7 @@ import {
   User,
 } from 'src/entities';
 import { StageSeederService } from './seeders/stage.seeder';
+import { TourSeederService } from './seeders/tour.seed';
 
 const seedEntities = [
   User,
@@ -31,7 +32,12 @@ const seedEntities = [
   BedReservation,
 ];
 
-const seeders = [UserSeederService, RefugeSeederService, StageSeederService];
+const seeders = [
+  UserSeederService,
+  RefugeSeederService,
+  StageSeederService,
+  TourSeederService,
+];
 
 @Module({
   imports: [
