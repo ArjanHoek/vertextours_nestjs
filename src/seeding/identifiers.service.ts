@@ -16,9 +16,17 @@ export class IdentifierService {
 
   public getIdentifierAtIndex<T>(entityName: string, index: number) {
     if (!this.identifiers[entityName]) {
-      return;
+      throw new Error(`No identifiers stored for entity '${entityName}'`);
     }
 
-    return this.identifiers[entityName][index] as unknown as T;
+    const identifier = this.identifiers[entityName][index] as unknown as T;
+
+    if (!identifier) {
+      throw new Error(
+        `No identifier stored at index '${index}' for entity '${entityName}'`,
+      );
+    }
+
+    return identifier;
   }
 }

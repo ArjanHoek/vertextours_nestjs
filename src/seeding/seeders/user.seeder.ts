@@ -1,10 +1,10 @@
+import * as argon from 'argon2';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import * as argon from 'argon2';
-import users from '../data/user.data';
 import { IdentifierService } from '../identifiers.service';
+import { User } from 'src/entities/';
+import users from '../data/user.data';
 
 @Injectable()
 export class UserSeederService {

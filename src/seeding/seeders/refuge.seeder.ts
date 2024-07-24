@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Refuge } from 'src/entities/refuge.entity';
 import { refuges } from '../data/refuge.data';
 import { IdentifierService } from '../identifiers.service';
-import { User } from 'src/entities/user.entity';
+import { User, Refuge } from 'src/entities/';
 
 @Injectable()
 export class RefugeSeederService {
@@ -24,7 +23,9 @@ export class RefugeSeederService {
       if (!owner) continue;
 
       const newEntity = this.refugeRepository.create({ name, country, owner });
-      await this.refugeRepository.save(newEntity);
+      const { id } = await this.refugeRepository.save(newEntity);
+
+      this.identifierService.saveIdentifier('refuge', id);
     }
   }
 
