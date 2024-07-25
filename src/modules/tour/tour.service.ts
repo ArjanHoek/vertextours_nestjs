@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tour } from 'src/entities';
 import { FindOptionsWhere, Repository } from 'typeorm';
+import { findOneOptions } from './query/findOneOptions';
 
 @Injectable()
 export class TourService {
@@ -11,10 +12,19 @@ export class TourService {
   ) {}
 
   public findAll() {
-    return this.repository.find();
+    return this.repository.find({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
   }
 
-  public findOne(where: FindOptionsWhere<Tour>) {
-    return this.repository.findOne({ where });
+  public async findOne(where: FindOptionsWhere<Tour>) {
+    const result = await this.repository.findOne({ where, ...findOneOptions });
+    return {
+      ...result,
+      stages: result.stages.map(({ stage }) => stage),
+    };
   }
 }

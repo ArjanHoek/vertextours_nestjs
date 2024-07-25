@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { RefugeService } from './refuge.service';
 import { QueryFailedError } from 'typeorm';
@@ -17,8 +18,8 @@ export class RefugeController {
   constructor(private refugeService: RefugeService) {}
 
   @Get()
-  async find() {
-    const refuges = await this.refugeService.find();
+  async find(@Query('country') country: string) {
+    const refuges = await this.refugeService.find({ country });
     return { refuges };
   }
 

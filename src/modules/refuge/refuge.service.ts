@@ -11,8 +11,8 @@ export class RefugeService {
     private refugeRepository: Repository<Refuge>,
   ) {}
 
-  findOne(where: FindOptionsWhere<Refuge>) {
-    return this.refugeRepository.findOne({
+  find(where: FindOptionsWhere<Refuge> = {}) {
+    return this.refugeRepository.find({
       where,
       select: {
         id: true,
@@ -21,8 +21,8 @@ export class RefugeService {
     });
   }
 
-  find(where: FindOptionsWhere<Refuge> = {}) {
-    return this.refugeRepository.find({
+  findOne(where: FindOptionsWhere<Refuge>) {
+    return this.refugeRepository.findOne({
       where,
       select: {
         id: true,
