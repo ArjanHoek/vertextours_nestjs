@@ -18,10 +18,10 @@ export class TourStage {
   })
   updated_at!: Date;
 
-  @ManyToOne(() => Stage, ({ id }) => id)
+  @ManyToOne(() => Stage, ({ id }) => id, { onDelete: 'CASCADE' })
   stage!: Stage;
 
-  @ManyToOne(() => Tour, ({ id }) => id)
+  @ManyToOne(() => Tour, ({ id }) => id, { onDelete: 'CASCADE' })
   tour!: Tour;
 
   @Column()

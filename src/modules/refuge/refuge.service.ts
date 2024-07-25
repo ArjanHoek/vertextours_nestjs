@@ -38,4 +38,8 @@ export class RefugeService {
   updateOne(id: string, dto: UpdateRefugeDto) {
     return this.refugeRepository.save({ ...dto, id });
   }
+
+  deleteOne(id: string) {
+    return this.refugeRepository.delete(id);
+  }
 }

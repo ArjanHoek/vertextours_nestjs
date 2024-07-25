@@ -30,7 +30,7 @@ export class Room {
   @Column({ type: 'real' })
   price!: number;
 
-  @ManyToOne(() => Refuge, ({ rooms }) => rooms)
+  @ManyToOne(() => Refuge, ({ rooms }) => rooms, { onDelete: 'CASCADE' })
   refuge!: Refuge;
 
   @OneToMany(() => Bed, ({ room }) => room)

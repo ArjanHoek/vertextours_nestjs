@@ -37,6 +37,6 @@ export class BedReservation {
   })
   bed!: Bed;
 
-  @ManyToOne(() => Reservation, ({ beds }) => beds)
+  @ManyToOne(() => Reservation, ({ beds }) => beds, { onDelete: 'CASCADE' })
   reservation!: Reservation;
 }

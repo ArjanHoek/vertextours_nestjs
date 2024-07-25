@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -44,5 +45,10 @@ export class RefugeController {
       }
       throw err;
     }
+  }
+
+  @Delete(':id')
+  async deleteOne(@Param('id') id: string) {
+    return this.refugeService.deleteOne(id);
   }
 }
