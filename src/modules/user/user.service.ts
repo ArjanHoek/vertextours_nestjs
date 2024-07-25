@@ -30,4 +30,8 @@ export class UserService {
     const newUser = this.userRepository.create({ email, hash });
     return this.userRepository.save(newUser);
   }
+
+  deleteOne(id: string) {
+    return this.userRepository.delete(id);
+  }
 }
