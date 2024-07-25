@@ -9,7 +9,7 @@ import {
   RoomSeederService,
   BedSeederService,
   BedReservationSeederService,
-} from './seeders/';
+} from './seeders';
 
 @Injectable()
 export class SeederService {
