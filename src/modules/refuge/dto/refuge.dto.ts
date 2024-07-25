@@ -1,3 +1,4 @@
+import { PartialType } from '@nestjs/swagger';
 import { IsIn, IsNotEmpty, MinLength } from 'class-validator';
 import { User } from 'src/entities';
 
@@ -13,3 +14,5 @@ export class RefugeDto {
   @IsNotEmpty()
   owner: User;
 }
+
+export class UpdateRefugeDto extends PartialType(RefugeDto) {}
