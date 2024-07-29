@@ -1,8 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Refuge } from 'src/entities/refuge.entity';
 import { FindOptionsWhere, Repository } from 'typeorm';
-import { RefugeDto, UpdateRefugeDto } from './dto/refuge.dto';
+import { CreateRefugeDto, UpdateRefugeDto } from './dto';
 
 @Injectable()
 export class RefugeService {
@@ -17,29 +22,61 @@ export class RefugeService {
       select: {
         id: true,
         name: true,
+        country: true,
       },
     });
   }
 
-  findOne(where: FindOptionsWhere<Refuge>) {
-    return this.refugeRepository.findOne({
+  public async findOne(where: FindOptionsWhere<Refuge>) {
+    const refuge = await this.refugeRepository.findOne({
       where,
       select: {
         id: true,
         name: true,
+        country: true,
       },
     });
+
+    if (!refuge) {
+      throw new NotFoundException();
+    }
+
+    return refuge;
   }
 
-  createOne(dto: RefugeDto) {
-    return this.refugeRepository.save(dto);
+  public async createOne(dto: CreateRefugeDto) {
+    const refuge = this.refugeRepository.create(dto);
+
+    try {
+      return await this.refugeRepository.save(refuge);
+    } catch (error) {
+      const { code, detail } = error;
+
+      if (code === '23503') {
+        throw new BadRequestException(detail);
+      }
+
+      if (code === '23505') {
+        throw new ConflictException(detail);
+      }
+
+      throw error;
+    }
   }
 
-  updateOne(id: string, dto: UpdateRefugeDto) {
-    return this.refugeRepository.save({ ...dto, id });
+  public async updateOne(id: string, dto: UpdateRefugeDto) {
+    const { affected } = await this.refugeRepository.update(id, dto);
+
+    if (!affected) {
+      throw new NotFoundException();
+    }
   }
 
-  deleteOne(id: string) {
-    return this.refugeRepository.delete(id);
+  public async deleteOne(id: string) {
+    const { affected } = await this.refugeRepository.delete(id);
+
+    if (!affected) {
+      throw new NotFoundException();
+    }
   }
 }
