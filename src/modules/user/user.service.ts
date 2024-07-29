@@ -1,5 +1,9 @@
-import { FindOptionsSelect, FindOptionsWhere, Repository } from 'typeorm';
-import { Injectable } from '@nestjs/common';
+import { FindOptionsWhere, Repository } from 'typeorm';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 
@@ -10,28 +14,48 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  findOne(
-    where: FindOptionsWhere<User>,
-    addSelect: FindOptionsSelect<User> = {},
-  ) {
-    return this.userRepository.findOne({
-      where,
-      select: {
-        id: true,
-        email: true,
-        created_at: true,
-        refuges: true,
-        ...addSelect,
-      },
-    });
-  }
-
-  createOne({ email, hash }: Partial<User>) {
+  public async createOne({ email, hash }: Partial<User>) {
     const newUser = this.userRepository.create({ email, hash });
-    return this.userRepository.save(newUser);
+
+    try {
+      return await this.userRepository.save(newUser);
+    } catch (error) {
+      if (error.code === '23505') {
+        throw new ConflictException(error.detail);
+      }
+
+      throw error;
+    }
   }
 
-  deleteOne(id: string) {
-    return this.userRepository.delete(id);
+  public findOneById(id: string) {
+    // NotFoundException will be thrown in private findOne() method
+    return this.findOne({ id });
+  }
+
+  public findOneByEmail(email: string, withHash = false) {
+    // NotFoundException will be thrown in private findOne() method
+    return this.findOne({ email }, withHash);
+  }
+
+  private async findOne(where: FindOptionsWhere<User>, includeHash = false) {
+    const user = await this.userRepository.findOne({
+      where,
+      select: { id: true, email: true, hash: includeHash },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
+  }
+
+  public async deleteOne(id: string) {
+    const { affected } = await this.userRepository.delete(id);
+
+    if (!affected) {
+      throw new NotFoundException('User not found');
+    }
   }
 }

@@ -76,7 +76,7 @@ export class RefugeService {
     const { affected } = await this.refugeRepository.delete(id);
 
     if (!affected) {
-      throw new NotFoundException();
+      throw new NotFoundException('Refuge not found');
     }
   }
 }

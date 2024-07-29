@@ -9,9 +9,11 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { RefugeService } from './refuge.service';
 import { CreateRefugeDto, UpdateRefugeDto } from './dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('refuges')
 export class RefugeController {
@@ -23,6 +25,7 @@ export class RefugeController {
   }
 
   @Post()
+  @UseGuards(AuthGuard)
   createOne(@Body() dto: CreateRefugeDto) {
     return this.refugeService.createOne(dto);
   }
@@ -33,12 +36,14 @@ export class RefugeController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   updateOne(@Param('id') id: string, @Body() dto: UpdateRefugeDto) {
     return this.refugeService.updateOne(id, dto);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteOne(@Param('id') id: string) {
     return this.refugeService.deleteOne(id);

@@ -1,8 +1,11 @@
 import {
   Controller,
+  Delete,
   Get,
-  NotFoundException,
+  HttpCode,
+  HttpStatus,
   Request,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -15,15 +18,20 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  async getProfile(
+  getProfile(
     @Request() { jwtPayload: { sub: id } }: { jwtPayload: JwtPayload },
   ) {
     if (!id) {
-      throw new NotFoundException();
+      throw new UnauthorizedException('No id found in access token');
     }
 
-    const user = await this.userService.findOne({ id });
+    return this.userService.findOneById(id);
+  }
 
-    return { user };
+  @Delete('delete')
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Request() { jwtPayload: { sub: id } }: { jwtPayload: JwtPayload }) {
+    return this.userService.deleteOne(id);
   }
 }
