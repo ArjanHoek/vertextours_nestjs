@@ -10,9 +10,13 @@ const config: Config = {
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
-  collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
+  collectCoverageFrom: [
+    '**/*.{controller,service}.ts',
+    '!**/node_modules/**',
+    '!**/vendor/**',
+  ],
 };
 
 export default config;
