@@ -7,15 +7,15 @@ import { Repository } from 'typeorm';
 export class TourService {
   constructor(
     @InjectRepository(Tour)
-    private repository: Repository<Tour>,
+    private tourRepository: Repository<Tour>,
   ) {}
 
-  public findAll() {
-    return this.repository.find({ select: { id: true, name: true } });
+  public find() {
+    return this.tourRepository.find({ select: { id: true, name: true } });
   }
 
   public async findOneById(id: string) {
-    const tour = await this.repository.findOne({
+    const tour = await this.tourRepository.findOne({
       where: { id },
       relations: { stages: { stage: { from_refuge: true, to_refuge: true } } },
       select: {
@@ -47,8 +47,8 @@ export class TourService {
     return { ...tour, stages };
   }
 
-  public async deleteOne(id: string) {
-    const { affected } = await this.repository.delete(id);
+  public async delete(id: string) {
+    const { affected } = await this.tourRepository.delete(id);
 
     if (!affected) {
       throw new NotFoundException('Tour not found');

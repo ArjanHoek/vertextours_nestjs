@@ -16,7 +16,7 @@ export class TourController {
 
   @Get()
   findAll() {
-    return this.tourService.findAll();
+    return this.tourService.find();
   }
 
   @Get(':id')
@@ -28,6 +28,6 @@ export class TourController {
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteOne(@Param('id') id: string) {
-    return this.tourService.deleteOne(id);
+    return this.tourService.delete(id);
   }
 }
