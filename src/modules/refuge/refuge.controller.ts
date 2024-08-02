@@ -14,6 +14,9 @@ import {
 import { RefugeService } from './refuge.service';
 import { CreateRefugeDto, UpdateRefugeDto } from './dto';
 import { AuthGuard } from '../auth/guards';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('refuges')
 export class RefugeController {
@@ -24,26 +27,29 @@ export class RefugeController {
     return this.refugeService.find({ country });
   }
 
-  @Post()
-  @UseGuards(AuthGuard)
-  createOne(@Body() dto: CreateRefugeDto) {
-    return this.refugeService.createOne(dto);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.refugeService.findOne({ id });
   }
 
+  @Post()
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  createOne(@Body() dto: CreateRefugeDto) {
+    return this.refugeService.createOne(dto);
+  }
+
   @Patch(':id')
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   updateOne(@Param('id') id: string, @Body() dto: UpdateRefugeDto) {
     return this.refugeService.updateOne(id, dto);
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteOne(@Param('id') id: string) {
     return this.refugeService.deleteOne(id);

@@ -8,7 +8,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TourService } from './tour.service';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../auth/guards';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('tours')
 export class TourController {
@@ -25,7 +28,8 @@ export class TourController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin, Role.Manager)
+  @UseGuards(AuthGuard, RolesGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteOne(@Param('id') id: string) {
     return this.tourService.delete(id);

@@ -11,10 +11,20 @@ import {
 import { UserService } from './user.service';
 import { AuthGuard } from 'src/modules/auth/guards';
 import { JwtPayload } from 'src/types';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Role } from '../auth/enums';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
+
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get()
+  getUsers() {
+    return this.userService.find();
+  }
 
   @UseGuards(AuthGuard)
   @Get('profile')
@@ -28,9 +38,9 @@ export class UserController {
     return this.userService.findOneById(id);
   }
 
-  @Delete('delete')
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('delete')
   delete(@Request() { jwtPayload: { sub: id } }: { jwtPayload: JwtPayload }) {
     return this.userService.deleteOne(id);
   }
