@@ -15,9 +15,9 @@ export class UserSeederService {
   ) {}
 
   async create() {
-    for (const { password, email } of users) {
+    for (const { password, ...rest } of users) {
       const hash = await argon.hash(password);
-      const newEntity = this.userRepository.create({ email, hash });
+      const newEntity = this.userRepository.create({ ...rest, hash });
       const { id } = await this.userRepository.save(newEntity);
       this.identifierService.saveIdentifier('user', id);
     }
