@@ -19,7 +19,7 @@ export class User {
   })
   updated_at!: Date;
 
-  @Column({ default: Role.User })
+  @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;
 
   @Column({ unique: true })
