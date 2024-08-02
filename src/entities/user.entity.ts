@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Refuge, Reservation, Tour } from './';
+import { Role } from 'src/modules/auth/enums';
 
 @Entity()
 export class User {
@@ -17,6 +18,9 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updated_at!: Date;
+
+  @Column({ default: Role.User })
+  role: Role;
 
   @Column({ unique: true })
   email!: string;

@@ -41,7 +41,7 @@ export class UserService {
   private async findOne(where: FindOptionsWhere<User>, includeHash = false) {
     const user = await this.userRepository.findOne({
       where,
-      select: { id: true, email: true, hash: includeHash },
+      select: { id: true, email: true, role: true, hash: includeHash },
     });
 
     if (!user) {
