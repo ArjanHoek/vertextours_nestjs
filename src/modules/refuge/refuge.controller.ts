@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { RefugeService } from './refuge.service';
 import { CreateRefugeDto, UpdateRefugeDto } from './dto';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../auth/guards';
 
 @Controller('refuges')
 export class RefugeController {
