@@ -44,7 +44,11 @@ export class AuthService {
   }
 
   private signToken(user: User) {
-    return this.jwtService.signAsync({ sub: user.id, email: user.email });
+    return this.jwtService.signAsync({
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    });
   }
 
   public validateToken(token: string) {
