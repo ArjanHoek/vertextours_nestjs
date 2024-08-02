@@ -28,6 +28,16 @@ export class UserService {
     }
   }
 
+  public find() {
+    return this.userRepository.find({
+      select: {
+        id: true,
+        email: true,
+        role: true,
+      },
+    });
+  }
+
   public findOneById(id: string) {
     // NotFoundException will be thrown in private findOne() method
     return this.findOne({ id });
