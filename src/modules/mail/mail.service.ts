@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTransport } from 'nodemailer';
-import { SendMailDto } from './dtos/send-mail.dto';
-import Mail, { Address } from 'nodemailer/lib/mailer';
+import Mail from 'nodemailer/lib/mailer';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { compile } from 'handlebars';
@@ -10,9 +9,8 @@ import { compile } from 'handlebars';
 @Injectable()
 export class MailService {
   private mailTransport: Mail;
-  private defaultFrom: Address;
 
-  constructor(configService: ConfigService) {
+  constructor(private readonly configService: ConfigService) {
     this.mailTransport = createTransport({
       host: configService.get<string>('MAIL_HOST'),
       port: configService.get<number>('MAIL_PORT'),
@@ -22,25 +20,26 @@ export class MailService {
         pass: configService.get<string>('MAIL_PASS'),
       },
     });
-
-    this.defaultFrom = {
-      address: configService.get<string>('DEFAULT_MAIL_FROM'),
-      name: configService.get<string>('APP_NAME'),
-    };
   }
 
-  public async sendEmail({ to, subject, text, ...dto }: SendMailDto) {
-    const file = await readFile(
+  public async sendConfirmationMail(email: string, token: string) {
+    const url = `${this.configService.get<string>('MAIL_CONFIRMATION_URL')}?token=${token}`;
+
+    const templateFile = await readFile(
       join(process.cwd(), 'src/modules/mail/templates/confirmation.hbs'),
       'utf-8',
     );
 
-    const template = compile(file);
-    const html = template({ text });
-    const from = dto.from ?? this.defaultFrom;
-
     try {
-      return this.mailTransport.sendMail({ from, to, subject, html });
+      return this.mailTransport.sendMail({
+        from: {
+          address: this.configService.get<string>('DEFAULT_MAIL_FROM'),
+          name: this.configService.get<string>('APP_NAME'),
+        },
+        to: [{ name: 'User', address: email }],
+        subject: 'Confirm Your Registration',
+        html: compile(templateFile)({ url, token }),
+      });
     } catch (error) {
       console.log('ERROR: ', error);
     }

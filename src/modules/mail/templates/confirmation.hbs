@@ -2,11 +2,15 @@
   <head>
     <title>Confirmation</title>
   </head>
-  
-  <body style="background:black;color:white">
-    <div>
-      <h1>This is a confirmation mail</h1>
-      <p>{{text}}</p>
-    </div>
+
+  <body style='background:white;color:black'>
+    <main style='max-width:100%'>
+      <h1>Please confirm to complete your registration</h1>
+      <a
+        style='background:black;color:white;text-decoration:none;padding:.5rem 1rem;border-radius:1rem;display:inline-block'
+        href={{url}}
+      >Confirm</a>
+      <p style='word-wrap: break-word'>{{token}}</p>
+    </main>
   </body>
 </html>

@@ -64,21 +64,11 @@ export class AuthService {
       },
     );
 
-    const url = `${this.configService.get<string>('MAIL_CONFIRMATION_URL')}?token=${token}`;
-
-    return this.mailService.sendEmail({
-      to: [{ name: 'User', address: email }],
-      subject: 'Account Confirmation',
-      text: `Please verify your account by clicking on the following link: ${url}`,
-    });
+    this.mailService.sendConfirmationMail(email, token);
   }
 
-  private signToken(user: User) {
-    return this.jwtService.signAsync({
-      sub: user.id,
-      email: user.email,
-      role: user.role,
-    });
+  private signToken({ email, role, id }: User) {
+    return this.jwtService.signAsync({ sub: id, email, role });
   }
 
   private validateMailConfirmationToken(token: string) {
