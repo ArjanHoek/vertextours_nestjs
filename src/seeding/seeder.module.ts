@@ -4,14 +4,34 @@ import { SeederService } from './seeder.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { IdentifierService } from './identifiers.service';
-import { entitiesList } from 'src/entities';
 import { seedersList } from './seeders';
+import {
+  Refuge,
+  User,
+  Stage,
+  Tour,
+  TourStage,
+  Reservation,
+  Room,
+  Bed,
+  BedReservation,
+} from 'src/entities';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     DatabaseModule,
-    TypeOrmModule.forFeature(entitiesList),
+    TypeOrmModule.forFeature([
+      User,
+      Refuge,
+      Stage,
+      Tour,
+      TourStage,
+      Reservation,
+      Room,
+      Bed,
+      BedReservation,
+    ]),
   ],
   providers: [SeederService, IdentifierService, ...seedersList],
 })

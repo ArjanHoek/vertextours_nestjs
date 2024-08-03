@@ -1,34 +1,9 @@
-import { Bed } from './bed.entity';
-import { BedReservation } from './bedReservation.entity';
-import { User } from './user.entity';
-import { Refuge } from './refuge.entity';
-import { Reservation } from './reservation.entity';
-import { Room } from './room.entity';
-import { Stage } from './stage.entity';
-import { Tour } from './tour.entity';
-import { TourStage } from './tourStage.entity';
-
-const entitiesList = [
-  Bed,
-  BedReservation,
-  Refuge,
-  Reservation,
-  Room,
-  Stage,
-  Tour,
-  TourStage,
-  User,
-];
-
-export {
-  Bed,
-  BedReservation,
-  Refuge,
-  Reservation,
-  Room,
-  Stage,
-  Tour,
-  TourStage,
-  User,
-  entitiesList,
-};
+export * from './bed.entity';
+export * from './bedReservation.entity';
+export * from './refuge.entity';
+export * from './reservation.entity';
+export * from './room.entity';
+export * from './stage.entity';
+export * from './tour.entity';
+export * from './tourStage.entity';
+export * from './user.entity';
