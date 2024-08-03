@@ -8,7 +8,7 @@ import {
 import { BedReservation, User } from './';
 
 @Entity()
-export class Reservation {
+export class Booking {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -33,6 +33,6 @@ export class Reservation {
   })
   user!: User;
 
-  @OneToMany(() => BedReservation, ({ reservation }) => reservation)
+  @OneToMany(() => BedReservation, ({ booking }) => booking)
   beds!: BedReservation[];
 }

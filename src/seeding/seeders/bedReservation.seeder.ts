@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Bed, BedReservation, Reservation } from 'src/entities';
+import { Bed, BedReservation, Booking } from 'src/entities';
 import { Repository } from 'typeorm';
 import { IdentifierService } from '../identifiers.service';
 import { bedReservationData } from '../data/bedReservation.data';
@@ -18,24 +18,23 @@ export class BedReservationSeederService {
       half_board,
       date,
       bed_index,
-      reservation_index,
+      booking_index,
     } of bedReservationData) {
       const bed = this.identifierService.getIdentifierAtIndex<Bed>(
         'bed',
         bed_index,
       );
 
-      const reservation =
-        this.identifierService.getIdentifierAtIndex<Reservation>(
-          'reservation',
-          reservation_index,
-        );
+      const booking = this.identifierService.getIdentifierAtIndex<Booking>(
+        'booking',
+        booking_index,
+      );
 
       const newEntity = this.repository.create({
         half_board,
         date,
         bed,
-        reservation,
+        booking,
       });
       const { id } = await this.repository.save(newEntity);
       this.identifierService.saveIdentifier('bedReservation', id);

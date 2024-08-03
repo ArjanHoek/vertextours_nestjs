@@ -1,12 +1,12 @@
 import { StageSeederService } from './stage.seeder';
 import { TourSeederService } from './tour.seed';
 import { TourStageSeederService } from './tourStage.seeder';
-import { ReservationSeederService } from './reservation.seeder';
 import { RoomSeederService } from './room.seeder';
 import { RefugeSeederService } from './refuge.seeder';
 import { UserSeederService } from './user.seeder';
 import { BedSeederService } from './bed.seeder';
 import { BedReservationSeederService } from './bedReservation.seeder';
+import { BookingSeederService } from './booking.seeder';
 
 const seedersList = [
   UserSeederService,
@@ -14,7 +14,7 @@ const seedersList = [
   StageSeederService,
   TourSeederService,
   TourStageSeederService,
-  ReservationSeederService,
+  BookingSeederService,
   RoomSeederService,
   BedSeederService,
   BedReservationSeederService,
@@ -27,7 +27,7 @@ export {
   StageSeederService,
   TourSeederService,
   TourStageSeederService,
-  ReservationSeederService,
+  BookingSeederService,
   RoomSeederService,
   BedSeederService,
   BedReservationSeederService,

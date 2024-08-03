@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { Bed, Reservation } from './';
+import { Bed, Booking } from './';
 
 @Entity()
 @Unique('bed already has a reservation on this date', ['date', 'bed'])
@@ -37,6 +37,6 @@ export class BedReservation {
   })
   bed!: Bed;
 
-  @ManyToOne(() => Reservation, ({ beds }) => beds, { onDelete: 'CASCADE' })
-  reservation!: Reservation;
+  @ManyToOne(() => Booking, ({ beds }) => beds, { onDelete: 'CASCADE' })
+  booking!: Booking;
 }

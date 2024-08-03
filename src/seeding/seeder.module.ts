@@ -11,7 +11,7 @@ import {
   Stage,
   Tour,
   TourStage,
-  Reservation,
+  Booking,
   Room,
   Bed,
   BedReservation,
@@ -19,7 +19,9 @@ import {
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: `.env.development.local`,
+    }),
     DatabaseModule,
     TypeOrmModule.forFeature([
       User,
@@ -27,7 +29,7 @@ import {
       Stage,
       Tour,
       TourStage,
-      Reservation,
+      Booking,
       Room,
       Bed,
       BedReservation,

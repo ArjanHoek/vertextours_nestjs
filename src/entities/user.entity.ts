@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Refuge, Reservation, Tour } from './';
+import { Booking, Refuge, Tour } from './';
 import { Role } from 'src/modules/auth/enums';
 
 @Entity()
@@ -37,6 +37,6 @@ export class User {
   @OneToMany(() => Tour, ({ created_by }) => created_by)
   tours_created!: Tour[];
 
-  @OneToMany(() => Reservation, ({ user }) => user)
-  reservations!: Reservation[];
+  @OneToMany(() => Booking, ({ user }) => user)
+  bookings!: Booking[];
 }
