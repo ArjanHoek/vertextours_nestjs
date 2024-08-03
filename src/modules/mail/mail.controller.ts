@@ -19,7 +19,7 @@ export class MailController {
         },
       ],
       subject: 'Test subject',
-      message: 'This is a test message',
+      text: 'This is a test message',
     });
   }
 }
