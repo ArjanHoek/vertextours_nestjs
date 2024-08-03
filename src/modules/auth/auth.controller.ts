@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDTO } from './dto';
 
@@ -12,13 +20,20 @@ export class AuthController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post('signin')
-  signIn(@Body() dto: AuthDTO) {
-    return this.authService.signIn(dto);
+  @Post('login')
+  login(@Body() dto: AuthDTO) {
+    return this.authService.login(dto);
   }
 
-  @Post('signup')
-  signUp(@Body() dto: AuthDTO) {
-    return this.authService.signUp(dto);
+  @Post('register')
+  public async register(@Body() dto: AuthDTO) {
+    const user = await this.authService.register(dto);
+    await this.authService.sendVerificationLink(user);
+    return user;
+  }
+
+  @Patch('confirm')
+  public confirm(@Query() { token }: { token: string }) {
+    return this.authService.confirmRegistration(token);
   }
 }
