@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module';
 import { RefugeModule } from './modules/refuge/refuge.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { TourModule } from './modules/tour/tour.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TourModule } from './modules/tour/tour.module';
     RefugeModule,
     ConfigModule.forRoot(),
     TourModule,
+    MailModule,
   ],
 })
 export class AppModule {}
