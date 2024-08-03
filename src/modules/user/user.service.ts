@@ -51,7 +51,13 @@ export class UserService {
   private async findOne(where: FindOptionsWhere<User>, includeHash = false) {
     const user = await this.userRepository.findOne({
       where,
-      select: { id: true, email: true, role: true, hash: includeHash },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        hash: includeHash,
+        isConfirmed: true,
+      },
     });
 
     if (!user) {
@@ -63,6 +69,16 @@ export class UserService {
 
   public async deleteOne(id: string) {
     const { affected } = await this.userRepository.delete(id);
+
+    if (!affected) {
+      throw new NotFoundException('User not found');
+    }
+  }
+
+  public async setUserConfirmed(id: string) {
+    const { affected } = await this.userRepository.update(id, {
+      isConfirmed: true,
+    });
 
     if (!affected) {
       throw new NotFoundException('User not found');
