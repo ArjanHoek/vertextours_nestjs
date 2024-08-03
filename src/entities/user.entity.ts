@@ -19,6 +19,9 @@ export class User {
   })
   updated_at!: Date;
 
+  @Column({ default: false })
+  isConfirmed: boolean;
+
   @Column({ type: 'enum', enum: Role, default: Role.User })
   role: Role;
 
