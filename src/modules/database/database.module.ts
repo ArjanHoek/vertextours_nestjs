@@ -18,26 +18,34 @@ import {
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (conf: ConfigService) => ({
-        type: 'postgres',
-        host: conf.get('DB_HOST'),
-        port: +conf.get('DB_PORT'),
-        username: conf.get('DB_USER'),
-        password: conf.get('DB_PASS'),
-        database: conf.get('DB_NAME'),
-        entities: [
-          User,
-          Refuge,
-          Stage,
-          Tour,
-          TourStage,
-          Reservation,
-          Room,
-          Bed,
-          BedReservation,
-        ],
-        synchronize: true,
-      }),
+      useFactory: (cfg: ConfigService) => {
+        const database = cfg.get('DB_NAME');
+
+        if (!database) {
+          throw Error('.env file not correctly loaded');
+        }
+
+        return {
+          database,
+          type: 'postgres',
+          host: cfg.get('DB_HOST'),
+          port: +cfg.get('DB_PORT'),
+          username: cfg.get('DB_USER'),
+          password: cfg.get('DB_PASS'),
+          entities: [
+            User,
+            Refuge,
+            Stage,
+            Tour,
+            TourStage,
+            Reservation,
+            Room,
+            Bed,
+            BedReservation,
+          ],
+          synchronize: true,
+        };
+      },
     }),
   ],
 })

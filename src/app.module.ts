@@ -14,7 +14,9 @@ import { MailModule } from './modules/mail/mail.module';
     AuthModule,
     UserModule,
     RefugeModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: `.env.${process.env.NODE_ENV}.local`,
+    }),
     TourModule,
     MailModule,
   ],
