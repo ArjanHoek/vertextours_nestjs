@@ -38,7 +38,7 @@ export class MailService {
         },
         to: [{ name: 'User', address: email }],
         subject: 'Confirm Your Registration',
-        html: compile(templateFile)({ url, token }),
+        html: compile(templateFile)({ url }),
       });
     } catch (error) {
       console.log('ERROR: ', error);
